@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>JS + CSS Clock</title>
+</head>
+
+<body>
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
+    </div>
+  </div>
+
+  <style>
+    html {
+      background: #018ded url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
+        inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hand {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    .clock-face::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: black;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .second-hand::after {
+      content: '';
+      position: absolute;
+      background: red;
+      width: 5px;
+      height: 50%;
+      bottom: 50%;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+
+    .min-hand::after {
+      content: '';
+      position: absolute;
+      background: white;
+      width: 10px;
+      height: 40%;
+      bottom: 50%;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+
+    .hour-hand::after {
+      content: '';
+      position: absolute;
+      background: white;
+      width: 15px;
+      height: 30%;
+      bottom: 50%;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+  </style>
+
+  <script>
+    // 360 度 / 60 (一圈 60 秒、分) => 一格 6 度 (秒、分)
+    // 360 度 / 12 (一圈 12 小時) => 一格 30 度 (小時)
+
+    (function () {
+      const secHand = document.querySelector('.second-hand');
+      const minHand = document.querySelector('.min-hand');
+      const hrHand = document.querySelector('.hour-hand');
+      function setClock() {
+        let dateObj = new Date();
+        // 秒針角度 = 佔整圈的百分比 (當前秒數 / 60 秒 (一圈))  * 360 度
+        let secDeg = (dateObj.getSeconds() / 60) * 360;
+        // 分針角度 = 佔整圈的百分比 (當前分鐘數 / 60 分 (一圈))  * 360 度  + 分鐘偏移角度(當前秒數 / 60秒 (一圈) * 一格 6 度
+        let minDeg = (dateObj.getMinutes() / 60) * 360 + (dateObj.getSeconds() / 60) * 6;
+        // 時針角度 = 佔整圈的百分比 (當前小時數 / 12 小時 (一圈))  * 360 度  + 小時偏移角度(當前分鐘數 / 60分 (一圈) * 一格 30 度
+        let hrDeg = (dateObj.getHours() / 12) * 360 + (dateObj.getMinutes() / 60) * 30;
+        secHand.style.transform = `rotate(${secDeg}deg)`;
+        minHand.style.transform = `rotate(${minDeg}deg)`;
+        hrHand.style.transform = `rotate(${hrDeg}deg)`;
+      }
+      setClock(); // 初始化
+
+      // 計時器 第 1 種：setInterval，設定間隔，持續執行
+      setInterval(setClock, 1000);
+
+
+      // 計時器 第 2 種：setTimeout，設定延遲，執行一次，如果要持續執行 就要在 function 裡呼叫自己
+      // function timeoutHandler() {
+      //   setClock();
+      //   setTimeout(timeoutHandler, 1000);
+      // }
+      // setTimeout(timeoutHandler, 1000);
+
+
+      // 計時器 第 3 種：window.requestAnimationFrame，觸發的點是畫面硬體更新，不用再設定時間，但需要自己呼叫自己 不然也只會執行一次
+      // function timeAnimationHandler() {
+      //   setClock();
+      //   window.requestAnimationFrame(timeAnimationHandler)
+      // }
+      // window.requestAnimationFrame(timeAnimationHandler);
+    })();
+  </script>
+</body>
+
+</html>
