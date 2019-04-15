@@ -115,9 +115,9 @@
         let dateObj = new Date();
         // 秒針角度 = 佔整圈的百分比 (當前秒數 / 60 秒 (一圈))  * 360 度
         let secDeg = (dateObj.getSeconds() / 60) * 360;
-        // 分針角度 = 佔整圈的百分比 (當前分鐘數 / 60 分 (一圈))  * 360 度  + 分鐘偏移角度(當前秒數 / 60秒 (一圈) * 一格 6 度
+        // 分針角度 = 佔整圈的百分比 (當前分鐘數 / 60 分 (一圈))  * 360 度  + 分鐘一格累進角度(當前秒數 / 60秒 (一圈) * 一格 6 度
         let minDeg = (dateObj.getMinutes() / 60) * 360 + (dateObj.getSeconds() / 60) * 6;
-        // 時針角度 = 佔整圈的百分比 (當前小時數 / 12 小時 (一圈))  * 360 度  + 小時偏移角度(當前分鐘數 / 60分 (一圈) * 一格 30 度
+        // 時針角度 = 佔整圈的百分比 (當前小時數 / 12 小時 (一圈))  * 360 度  + 小時一格累進角度(當前分鐘數 / 60分 (一圈) * 一格 30 度
         let hrDeg = (dateObj.getHours() / 12) * 360 + (dateObj.getMinutes() / 60) * 30;
         secHand.style.transform = `rotate(${secDeg}deg)`;
         minHand.style.transform = `rotate(${minDeg}deg)`;
